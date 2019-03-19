@@ -1,4 +1,4 @@
-package bob.demos.model;
+package bob.demos.domain.jpa;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,12 +12,12 @@ public class Product {
     @Id
     private String id;
     private String desc;
-    private Integer usdPrice;
+    private long usdPrice;
 
     public Product() {
     }
 
-    public Product(String id, String desc, Integer usdPrice) {
+    public Product(String id, String desc, long usdPrice) {
         this.id = id;
         this.desc = desc;
         this.usdPrice = usdPrice;
@@ -31,7 +31,7 @@ public class Product {
         return desc;
     }
 
-    public Integer getUsdPrice() {
+    public long getUsdPrice() {
         return usdPrice;
     }
 
@@ -50,4 +50,12 @@ public class Product {
         return Objects.hash(id, desc, usdPrice);
     }
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", desc='" + desc + '\'' +
+                ", usdPrice=" + usdPrice +
+                '}';
+    }
 }

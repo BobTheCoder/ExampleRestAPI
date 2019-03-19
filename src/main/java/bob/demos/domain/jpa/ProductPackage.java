@@ -1,9 +1,6 @@
-package bob.demos.model;
+package bob.demos.domain.jpa;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -11,23 +8,20 @@ import java.util.List;
 public class ProductPackage {
 
     @Id
-    private final int id;
+    private final String id;
     private final String desc;
     private final String name;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private final List<Product> productList;
-    private Integer pricePence;
 
-    public ProductPackage(int id, String desc, String name, List<Product> productList) {
+    public ProductPackage(String id, String desc, String name, List<Product> productList) {
         this.id = id;
         this.desc = desc;
         this.name = name;
         this.productList = productList;
-
-        this.pricePence = productList.stream().map(Product::getUsdPrice).mapToInt(Integer::intValue).sum();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -43,17 +37,12 @@ public class ProductPackage {
         return productList;
     }
 
-    public void setPricePence(Integer pricePence) {
-        this.pricePence = pricePence;
+    /**
+     * Method returns the sum of all the product prices in USD
+     */
+    public long getPriceUSD() {
+        return productList.stream().map(Product::getUsdPrice).mapToInt(Long::intValue).sum();
     }
-
-    public Integer getPricePence() {
-        return pricePence;
-    }
-
-//    public addProduct(Product ) {
-
-//    }
 
     @Override
     public String toString() {
@@ -62,7 +51,6 @@ public class ProductPackage {
                 ", desc='" + desc + '\'' +
                 ", name='" + name + '\'' +
                 ", productList=" + productList +
-                ", pricePence=" + pricePence +
                 '}';
     }
 }
