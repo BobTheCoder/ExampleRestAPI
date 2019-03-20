@@ -1,10 +1,17 @@
 package bob.demos.controller;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Objects;
 
+@ApiModel(description = "Product object, describes the attributes of a product")
 public class ProductDTO {
+    @ApiModelProperty(notes = "Unique identifier for a product")
     private final String id;
+    @ApiModelProperty(notes = "Description of the product")
     private final String desc;
+    @ApiModelProperty(notes = "Price in USD")
     private final long usdPrice;
 
     public ProductDTO(String id, String desc, long usdPrice) {
