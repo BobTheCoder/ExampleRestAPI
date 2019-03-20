@@ -52,4 +52,11 @@ public class ProductPackageManagementService {
     public void updateProductPackage(ProductPackage productPackage) throws EntityNotFoundException {
         productPackageRepository.save(productPackage);
     }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public void deletePackage(String packageId) {
+        List<ProductPackage> allDBPackages = productPackageRepository.findAll();
+
+        productPackageRepository.deleteById(packageId);
+    }
 }

@@ -56,8 +56,9 @@ public class ProductPackageController {
 
     @ApiOperation(value = "Deletes an existing ProductPackage")
     @DeleteMapping("/packages/{packageId}")
-    public void deleteProductPackage(@RequestBody String packageId) {
-
+    public void deleteProductPackage(@PathVariable String packageId) {
+        LOGGER.info("Received request to delete packageId={}", packageId);
+        productPackageManagementService.deletePackage(packageId);
     }
 
     @ApiOperation(value = "Returns a list of all available products", response = List.class, produces = "application/json")
