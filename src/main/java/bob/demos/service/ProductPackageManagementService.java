@@ -76,14 +76,12 @@ public class ProductPackageManagementService {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public void updateProductPackage(ProductPackage productPackage) throws EntityNotFoundException {
+    public void updateProductPackage(ProductPackage productPackage) {
         productPackageRepository.save(productPackage);
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
     public void deletePackage(String packageId) {
-        List<ProductPackage> allDBPackages = productPackageRepository.findAll();
-
-        productPackageRepository.deleteById(packageId);
+       productPackageRepository.deleteById(packageId);
     }
 }

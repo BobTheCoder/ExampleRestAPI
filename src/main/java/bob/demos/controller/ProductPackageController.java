@@ -6,8 +6,7 @@ import bob.demos.domain.ProductPackagePrice;
 import bob.demos.domain.jpa.Product;
 import bob.demos.domain.jpa.ProductPackage;
 import bob.demos.service.ProductPackageManagementService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 @RestController
 @RequestMapping("/v1")
@@ -28,7 +30,8 @@ public class ProductPackageController {
         this.productPackageManagementService = productPackageManagementService;
     }
 
-    @ApiOperation(value = "List of available packages of products", response = List.class, produces = "application/json")
+    @ApiOperation(value = "List of available packages of products", response = ProductPackageDTO.class,
+            responseContainer = "List", produces = "application/json")
     @GetMapping("/packages")
     public List<ProductPackageDTO> getAllPackages() {
         List<ProductPackagePrice> allPackages = productPackageManagementService.findAllPackages();
@@ -37,16 +40,30 @@ public class ProductPackageController {
         return allPackages.stream().map(ProductPackageTransformer::toProductPackageDTO).collect(Collectors.toList());
     }
 
-    @ApiOperation(value = "List a specific packages of products with price in a specified currency",
-            response = List.class, produces = "application/json")
+    @ApiOperation(value = "List a specific package of products. The price will be returned in the requested currency " +
+            "or if not supplied will default to USD",
+            response = ProductPackageDTO.class, produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HTTP_OK, message = "Success"),
+            @ApiResponse(code = HTTP_NOT_FOUND, message = "Could not find product package")
+    })
     @GetMapping("/packages/{packageId}/{currency}")
-    public ProductPackageDTO getPackage(@PathVariable String packageId, @PathVariable Optional<String> currency) {
+    public ProductPackageDTO getPackage(
+            @ApiParam(required = true, name = "packageId")
+            @PathVariable String packageId,
+            @ApiParam(name = "currency",
+                    required = false,
+                    value = "Optional parameter - the 3 letter ISO currency code you would like the package price returned with",
+                    allowEmptyValue = true)
+            @PathVariable Optional<String> currency) throws ProductPackageNotFoundRestException {
         Optional<ProductPackagePrice> optionalPackage = productPackageManagementService.findPackageWithCurrency(packageId, currency);
-        // throws NoSuchElementException
+
         if (optionalPackage.isPresent()) {
             return ProductPackageTransformer.toProductPackageDTO(optionalPackage.get());
         }
-        return null;
+
+        LOGGER.error("Product packageId={} can't be found", packageId);
+        throw new ProductPackageNotFoundRestException("Product package can't be found");
     }
 
     @ApiOperation(value = "Adds a new ProductPackage or modifies an existing one")
@@ -64,7 +81,7 @@ public class ProductPackageController {
         productPackageManagementService.deletePackage(packageId);
     }
 
-    @ApiOperation(value = "Returns a list of all available products", response = List.class, produces = "application/json")
+    @ApiOperation(value = "Returns a list of all available products", response = ProductDTO.class, responseContainer = "List", produces = "application/json")
     @GetMapping("/products")
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productPackageManagementService.getAllProducts();
