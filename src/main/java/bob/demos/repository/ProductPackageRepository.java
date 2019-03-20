@@ -1,4 +1,4 @@
-package bob.demos.Repository;
+package bob.demos.repository;
 
 import bob.demos.domain.jpa.ProductPackage;
 import org.springframework.data.jpa.repository.JpaRepository;

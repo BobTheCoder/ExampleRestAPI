@@ -1,9 +1,9 @@
 package bob.demos.service;
 
-import bob.demos.Repository.ProductPackageRepository;
 import bob.demos.domain.ProductPackagePrice;
 import bob.demos.domain.jpa.ProductPackage;
 import bob.demos.domain.jpa.ProductPackageTestDataBuilder;
+import bob.demos.repository.ProductPackageRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -55,4 +55,5 @@ public class ProductPackageManagementServiceTest {
         assertEquals("Currency should be USD", "USD", productPackagePrice2.getCurrencyCode());
         assertEquals("Wrong price", 0, productPackagePrice2.getPrice());
     }
+
 }

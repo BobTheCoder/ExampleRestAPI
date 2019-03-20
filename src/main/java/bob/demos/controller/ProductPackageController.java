@@ -39,10 +39,13 @@ public class ProductPackageController {
 
     @ApiOperation(value = "List a specific packages of products with price in a specified currency",
             response = List.class, produces = "application/json")
-    @GetMapping({"/packages/{packageId}", "/packages/{packageId}/{currency}"})
+    @GetMapping("/packages/{packageId}/{currency}")
     public ProductPackageDTO getPackage(@PathVariable String packageId, @PathVariable Optional<String> currency) {
-        Optional<ProductPackage> optionalPackage = productPackageManagementService.findPackageWithCurrency(packageId, currency);
+        Optional<ProductPackagePrice> optionalPackage = productPackageManagementService.findPackageWithCurrency(packageId, currency);
         // throws NoSuchElementException
+        if (optionalPackage.isPresent()) {
+            return ProductPackageTransformer.toProductPackageDTO(optionalPackage.get());
+        }
         return null;
     }
 
