@@ -5,7 +5,7 @@ public class PriceDTO {
     private final String currency;
     private final long price;
 
-    public PriceDTO(String currency, Integer price) {
+    public PriceDTO(String currency, long price) {
         this.currency = currency;
         this.price = price;
     }

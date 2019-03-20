@@ -42,7 +42,7 @@ public class ProductPackageManagementService {
         return packagesWithPrices;
     }
 
-    public Optional<ProductPackage> findPackageWithCurrency(String packageId, String currencyCode) {
+    public Optional<ProductPackage> findPackageWithCurrency(String packageId, Optional<String> currencyCode) {
         return null;
     }
 }

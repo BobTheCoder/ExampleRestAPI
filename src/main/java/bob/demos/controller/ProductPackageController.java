@@ -1,6 +1,8 @@
 package bob.demos.controller;
 
+import bob.demos.controller.transformer.ProductPackageTransformer;
 import bob.demos.controller.transformer.ProductTransformer;
+import bob.demos.domain.ProductPackagePrice;
 import bob.demos.domain.jpa.Product;
 import bob.demos.domain.jpa.ProductPackage;
 import bob.demos.service.ProductPackageManagementService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1")
@@ -25,17 +28,20 @@ public class ProductPackageController {
         this.productPackageManagementService = productPackageManagementService;
     }
 
-    @ApiOperation(value = "View a list of available employees", response = List.class, produces = "application/json")
+    @ApiOperation(value = "List of available packages of products", response = List.class, produces = "application/json")
     @GetMapping("/packages")
     public List<ProductPackageDTO> getAllPackages() {
-//        List<ProductPackage> allPackages = productPackageManagementService.findAllPackages();
-        return null;
+        List<ProductPackagePrice> allPackages = productPackageManagementService.findAllPackages();
+
+        LOGGER.info("Returning {} packages", allPackages.size());
+        return allPackages.stream().map(ProductPackageTransformer::toProductPackageDTO).collect(Collectors.toList());
     }
 
-    @ApiOperation(value = "View a list of available employees", response = List.class, produces = "application/json")
+    @ApiOperation(value = "List a specific packages of products with price in a specified currency",
+            response = List.class, produces = "application/json")
     @GetMapping({"/packages/{packageId}", "/packages/{packageId}/{currency}"})
     public ProductPackageDTO getPackage(@PathVariable String packageId, @PathVariable Optional<String> currency) {
-        Optional<ProductPackage> optionalPackage = productPackageManagementService.findPackageWithCurrency(packageId, "USD");
+        Optional<ProductPackage> optionalPackage = productPackageManagementService.findPackageWithCurrency(packageId, currency);
         // throws NoSuchElementException
         return null;
     }

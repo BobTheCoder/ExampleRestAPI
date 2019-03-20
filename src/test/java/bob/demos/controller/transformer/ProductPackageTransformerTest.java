@@ -1,26 +1,27 @@
 package bob.demos.controller.transformer;
 
 import bob.demos.controller.ProductPackageDTO;
+import bob.demos.domain.ProductPackagePrice;
 import bob.demos.domain.jpa.ProductPackage;
 import org.junit.Test;
 
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 public class ProductPackageTransformerTest extends ParentTransformerTest {
-
-//    private static final List<ProductDTO> TEST_PRODUCTDTO_LIST = Arrays.asList(TEST_PRODUCT_DTO, TEST_PRODUCT_DTO2);
-
-    //    private static final ProductPackageDTO TEST_PACKAGE_DTO_LIST = new ProductPackageDTO(PACKAGE_ID, PACKAGE_DESC, PACKAGE_NAME, TEST_PRODUCTDTO_LIST);
     private static final ProductPackage TEST_PACKAGE = new ProductPackage(PACKAGE_ID, PACKAGE_DESC, PACKAGE_NAME, TEST_PRODUCT_LIST);
+    public static final long TEST_PRICE = 1000;
+    private static final ProductPackagePrice TEST_PPP = new ProductPackagePrice(TEST_PACKAGE, TEST_PRICE, "GBP");
 
     @Test
     public void toProductPackageDTO() {
-        ProductPackageDTO productPackageDTO = ProductPackageTransformer.toProductPackageDTO(TEST_PACKAGE);
+        ProductPackageDTO productPackageDTO = ProductPackageTransformer.toProductPackageDTO(TEST_PPP);
 
         assertEquals("Wrong value for Id", PACKAGE_ID, productPackageDTO.getId());
         assertEquals("Wrong value for name", PACKAGE_NAME, productPackageDTO.getName());
         assertEquals("Wrong value for desc", PACKAGE_DESC, productPackageDTO.getDesc());
 
         assertCorrectProductDTOs(productPackageDTO.getProductList());
+        assertEquals("Wrong price", TEST_PRICE, productPackageDTO.getPriceDTO().getPrice());
+        assertEquals("Wrong currency", "GBP", productPackageDTO.getPriceDTO().getCurrency());
     }
 }
