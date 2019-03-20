@@ -15,6 +15,10 @@ public final class ProductTransformer {
         return new Product(productDTO.getId(), productDTO.getDesc(), productDTO.getUsdPrice());
     }
 
+    public static List<Product> toProductCollection(Collection<ProductDTO> products) {
+        return products.stream().map(ProductTransformer::toProduct).collect(Collectors.toList());
+    }
+
     public static ProductDTO toProductDTO(Product product) {
         return new ProductDTO(product.getId(), product.getDesc(), product.getUsdPrice());
     }

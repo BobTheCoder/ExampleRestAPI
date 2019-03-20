@@ -20,4 +20,11 @@ public class ProductPackageTransformer {
                 productPackage.getProductList().stream().map(ProductTransformer::toProductDTO).collect(Collectors.toList()),
                 new PriceDTO(productPackagePrice.getCurrencyCode(), productPackagePrice.getPrice()));
     }
+
+    public static ProductPackage toPackageProduct(ProductPackageDTO productPackageDTO) {
+        return new ProductPackage(productPackageDTO.getId(),
+                productPackageDTO.getDesc(),
+                productPackageDTO.getName(),
+                ProductTransformer.toProductCollection(productPackageDTO.getProductList()));
+    }
 }

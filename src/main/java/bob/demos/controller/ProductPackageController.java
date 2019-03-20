@@ -49,13 +49,9 @@ public class ProductPackageController {
     @ApiOperation(value = "Adds a new ProductPackage or modifies an existing one")
     @PutMapping("/packages")
     public void updateProductPackage(@RequestBody ProductPackageDTO productPackageDTO) {
-
-    }
-
-    @ApiOperation(value = "Adds a new ProductPackage")
-    @PostMapping("/packages")
-    public void addProductPackage(@RequestBody ProductPackageDTO productPackageDTO) {
-
+        ProductPackage productPackage = ProductPackageTransformer.toPackageProduct(productPackageDTO);
+        LOGGER.info("Saving package={} to DB", productPackage);
+        productPackageManagementService.updateProductPackage(productPackage);
     }
 
     @ApiOperation(value = "Deletes an existing ProductPackage")

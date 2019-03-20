@@ -8,11 +8,14 @@ import java.util.List;
 public class ProductPackage {
 
     @Id
-    private final String id;
-    private final String desc;
-    private final String name;
-    @OneToMany(fetch = FetchType.EAGER)
-    private final List<Product> productList;
+    private String id;
+    private String desc;
+    private String name;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private List<Product> productList;
+
+    public ProductPackage() {
+    }
 
     public ProductPackage(String id, String desc, String name, List<Product> productList) {
         this.id = id;

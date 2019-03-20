@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,5 +46,10 @@ public class ProductPackageManagementService {
 
     public Optional<ProductPackage> findPackageWithCurrency(String packageId, Optional<String> currencyCode) {
         return null;
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public void updateProductPackage(ProductPackage productPackage) throws EntityNotFoundException {
+        productPackageRepository.save(productPackage);
     }
 }

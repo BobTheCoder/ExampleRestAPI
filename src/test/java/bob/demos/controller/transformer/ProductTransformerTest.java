@@ -20,6 +20,13 @@ public class ProductTransformerTest extends ParentTransformerTest {
     }
 
     @Test
+    public void testToCollectionOfProduct() {
+        Collection<Product> products = ProductTransformer.toProductCollection(TEST_PRODUCTDTO_LIST);
+
+        assertCorrectProducts(products);
+    }
+
+    @Test
     public void toDto() {
         ProductDTO productDTO = ProductTransformer.toProductDTO(TEST_PRODUCT);
 
